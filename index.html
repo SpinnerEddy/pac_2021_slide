@@ -96,7 +96,7 @@
 
   <!-- Theme used for syntax highlighting of code -->
   
-  <link rel="stylesheet" href="libs/highlight.js/9.12.0/monokai.css">
+  <link rel="stylesheet" href="libs/highlight.js/9.12.0/Zenburn.css">
   
 
   
@@ -288,17 +288,155 @@
 
 
     
+        <section >
+            
+            <h3><a id="user-content-自己紹介" class="anchor" href="#自己紹介" aria-hidden="true"></a>自己紹介</h3>
+<ul>
+<li>
+<p>名前 : 独楽回しeddy</p>
+</li>
+<li>
+<p>twitter : <a href="https://twitter.com/EKey2210">https://twitter.com/EKey2210</a></p>
+</li>
+<li>
+<p>週に1つくらいの間隔でProcessing、p5.js、glslなどを使ってお絵描きして動画投稿してます。</p>
+</li>
+</ul>
+
+            </section>
+    
+
+
+
+    
+        <section >
+            
+            <h3><a id="user-content-今回のテーマ" class="anchor" href="#今回のテーマ" aria-hidden="true"></a>今回のテーマ</h3>
+<ul>
+<li>p5.js と バーテックスシェーダー</li>
+<li>p5.jsでバーテックスシェーダーを使って動くものを作ってみます。</li>
+</ul>
+<iframe height="500px" width="700px" src="https://neort.io/embed/c6183gk3p9fe3sqpr1eg?autoStart=true&quality=1&info=true" frameborder="0" sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts" allow="geolocation;" allowfullscreen="true" allowtransparency="true" style="position:relative; top:60px; overflow:hidden; z-index:10;"></iframe>
+            </section>
+    
+
+
+
+    
+        <section >
+            
+            <h3><a id="user-content-シェーダーって何？" class="anchor" href="#シェーダーって何？" aria-hidden="true"></a>シェーダーって何？</h3>
+<ul>
+<li>シェーダーについての説明…</li>
+</ul>
+
+            </section>
+    
+
+
+
+    
     <section>
         <section >
-            <p>自己紹介</p>
+            <h3><a id="user-content-揺らす元の模様を作ってみる" class="anchor" href="#揺らす元の模様を作ってみる" aria-hidden="true"></a>揺らす元の模様を作ってみる</h3>
+<ul>
+<li>createGraphics を使って作っていきます。</li>
+<li>createGraphics はCanvasとは別で画像として扱う事が可能な描画領域を作り出す関数</li>
+</ul>
+<pre><code class="language-js">createGraphics(width, height, [renderer]);
+</code></pre>
 
             </section>
         
             <section >
-                <ul>
-<li>名前 : 独楽回しeddy</li>
-<li>twitter : <a href="https://twitter.com/EKey2210">https://twitter.com/EKey2210</a></li>
-<li>週１位の間隔でProcessing、p5.js、glslなどを使ってお絵描きして動画投稿してます。</li>
+                <h3><a id="user-content-コード１" class="anchor" href="#コード１" aria-hidden="true"></a>コード１</h3>
+<ul>
+<li>青い背景に白で塗り潰した描画領域を作って表示するスケッチ</li>
+</ul>
+<pre><code class="language-js">let grachics;
+
+function setup(){
+    // 一度だけ呼ばれる
+    createCanvas(600, 600);  // 600×600 の画面を作る
+    background(color(&quot;#255699&quot;));  // 背景を塗りつぶす(色は任意)
+
+    graphics = createGraphics(450, 300);  // 450×300 の新たな描画領域を作る
+}
+
+function draw(){
+    // 何度も呼ばれる(1秒につき30 ~ 60回)
+    background(37, 86, 153);
+
+    graphics.background(255);  // 新たな白で描画領域は塗りつぶす
+    
+    // createGraphicsで作った描画領域は画像として扱えるので画像の描画方法と同じ
+    imageMode(CENTER);  // 画像の中心を配置基準とする
+    image(graphics, width/2, height/2);  // 画面の中心(横幅の半分、縦幅の半分)に配置する
+}
+</code></pre>
+
+            </section>
+        
+            <section >
+                <iframe src="https://openprocessing.org/sketch/1380490/embed/?plusEmbedHash=YTcwNDVjOWQ2OWJlNDY3ZDVkOTk5YjVlMmQ1NTYyOGM1YTIwNzI5Njc1ZjQ5MDZjMjA2YTI0OTQyNTY4ZmEwYzUxOTkwOWY4YmQ1OTA1NTM1MTc5MThjOWI0YWE2MDY1YWRiOTRkY2RlYzg4NWY3ZjY4OGFhMjIyNTljZGQxY2ROdUVoQXo2cEpJWUl6NUxqNE1keUFzWHVqMGw3V0ZVSU9KTnp0NU9sbTJzUU1lcTlYTk5oeEJ5SXRhVkFNNDhNaloyWEFsaWNQMTlJYlNOVFZxa1FiZz09" width="49%" height="505"></iframe><br>
+<ul>
+<li>中央にある白い部分がcreateCanvasで作った描画領域です。しかしこれではかなり寂しいので白い部分にもう少しだけ図形を追加してみます。</li>
+</ul>
+
+            </section>
+        
+            <section >
+                <h3><a id="user-content-コード２" class="anchor" href="#コード２" aria-hidden="true"></a>コード２</h3>
+<ul>
+<li>描画領域に4色の図形を描いて表示するスケッチ</li>
+</ul>
+<pre><code class="language-js">let grachics;
+
+function setup(){
+    // 一度だけ呼ばれる
+    createCanvas(600, 600);  // 600×600 の画面を作る
+    background(color(&quot;#255699&quot;));  // 背景を塗りつぶす(色は任意)
+
+    graphics = createGraphics(450, 300);  // 450×300 の新たな描画領域を作る
+
+    graphics.background(255);  // 白で描画領域は塗りつぶす
+    graphics.ellipseMode(CENTER); // 円を描画する際はその中心を配置基準とする
+    graphics.rectMode(CENTER);  // 四角を描画する際はその中心を配置基準とする
+    graphics.noStroke();  // 線は書かない
+
+    graphics.push();  // 描画する上での設定を保存
+    graphics.translate(graphics.width/2, graphics.height/2);  // 描画領域の中心を原点とする
+    graphics.fill(color(&quot;#50d0d0&quot;)); // 水色
+    graphics.ellipse(-120, -80, 75); // 円を描く
+
+    graphics.fill(color(&quot;#be1e3e&quot;)); // 赤色
+    graphics.rect(120, -80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#7967c3&quot;)); // 紫色
+    graphics.rect(-120, 80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#ffc639&quot;)); // 黄色
+    graphics.ellipse(120, 80, 75); // 円を描く
+    graphics.pop(); // 描画する上での設定を元に戻す
+}
+
+function draw(){
+    // 何度も呼ばれる(1秒につき30 ~ 60回)
+    background(37, 86, 153);
+
+    // createGraphicsで作った描画領域は画像として扱えるので画像の描画方法と同じ
+    imageMode(CENTER);  // 画像の中心を配置基準とする
+    image(graphics, width/2, height/2);  // 画面の中心(横幅の半分、縦幅の半分)に配置する
+}
+</code></pre>
+<p class="fragment current-only" data-code-focus="11-28">変更箇所</p>
+
+            </section>
+        
+            <section >
+                <iframe src="https://openprocessing.org/sketch/1380501/embed/?plusEmbedHash=M2UwMTNlZDA5NzEzYzI3NGVmNzBjODgyMGNjMjRhOTRmZGZkOTlkNDg3MzA3NTc2ZGEzMmQ5M2VlZTJmODQxNWRjZTY2YTlhYzdiZmJkMjdlZDI1YTdhZTFkMDE3NTQzMjFjOGNjMWM2NDlkYWE0NmM1ODNhYzFlMzgzZGRhZTh1eWFEajB4S3lWcC9MN0NtOFJuZGxIRkNHMHhDNll2STBXN2k2OXd6cmdyVHlBQXRuNDF4M21uUkdUNzU5VXdmbW9WQUJFL1JwNENZZFhUU0ZFZ3Bodz09" width="49%" height="505"></iframe>
+<ul>
+<li>描画領域に4色の図形が描画されました。これで元となる模様は完成です。</li>
 </ul>
 
             </section>
@@ -310,12 +448,81 @@
 
 
     
+    <section>
         <section >
-            
-            <p>テーマ : p5.js と バーテックスシェーダー</p>
-<p>p5.jsでバーテックスシェーダーを使って動くものを作ってみます。</p>
-<iframe height="400px" width="600px" src="https://neort.io/embed/c6183gk3p9fe3sqpr1eg?autoStart=true&quality=1&info=true" frameborder="0" sandbox="allow-forms allow-modals allow-pointer-lock allow-popups allow-same-origin allow-scripts" allow="geolocation; " allowfullscreen="true" allowtransparency="true"></iframe>
+            <h3><a id="user-content-平面を作る" class="anchor" href="#平面を作る" aria-hidden="true"></a>平面を作る</h3>
+<ul>
+<li>作成した画像を貼り付けるための平面を作ります。</li>
+</ul>
+
             </section>
+        
+            <section >
+                <h3><a id="user-content-イメージ１" class="anchor" href="#イメージ１" aria-hidden="true"></a>イメージ１</h3>
+<p><img src="Plane1.png" width=300 height=300 alt="Plane"><br></p>
+<ul>
+<li>最小の平面は頂点4つから成る。</li>
+<li>[0,1,2]、[1,2,3]の順に結ぶと出来る三角形2つが組み合わさって出来る。</li>
+</ul>
+
+            </section>
+        
+            <section >
+                <h3><a id="user-content-イメージ2" class="anchor" href="#イメージ2" aria-hidden="true"></a>イメージ2</h3>
+<p><img src="Plane2.png" width=300 height=300 alt="Plane"><br></p>
+<ul>
+<li>今回は出来るだけ細かく波打つようにしたい<br> -&gt; 小さい四角形をたくさん組み合わせて作り上げるイメージ</li>
+</ul>
+
+            </section>
+        
+            <section >
+                <ul>
+<li>平面を作成するスケッチ</li>
+</ul>
+<pre><code class="language-js">let gWidth = 450;       // メッシュの横の長さ
+let gHeight = 300;      // メッシュの縦の長さ
+
+let len = 10;           // 小さな四角形の1辺の長さ 
+let col = gWidth/len;   // 全体の横の長さをlenで割って、行の点の数を求める
+let row = gHeight/len;  // 全体の縦の長さをlenで割って、列の点の数を求める
+
+function setup() {
+    createCanvas(600, 600);
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+}
+
+function draw() {
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+
+    translate((width-gWidth)/2, (height-gHeight)/2);  // 平面を中央に置くために必要
+    noFill();  // 塗り潰ししない
+    stroke(255);  // 白い線
+
+    for (let y = 0; y &lt; row - 1; y++) {      // 1周毎に次の列の頂点まで見るので列数-1まで
+        beginShape(TRIANGLE_STRIP);          // 順に連結した三角形 を生成する
+        for (let x = 0; x &lt; col; x++) {      // 1行の頂点全てで見ていく
+            vertex(x * len, y * len);        // 頂点 x, y 
+            vertex(x * len, (y + 1) * len);  // 頂点 x, y+1
+        }
+        endShape();                // 1列分が終わったら一旦区切る
+    }
+}
+</code></pre>
+
+            </section>
+        
+            <section >
+                <h3><a id="user-content-平面を作成するスケッチ" class="anchor" href="#平面を作成するスケッチ" aria-hidden="true"></a>平面を作成するスケッチ</h3>
+<iframe src="https://openprocessing.org/sketch/1380571/embed/?plusEmbedHash=ODlkNmVmYmI4MzQ0MTVlM2VjYWVmNTJkYTE3MzM4ZjlmY2U3ZDZmNGYwZjZlNDgxNWMzNGZkMmRjYTkwMGQ0ZDFhYzRmMWNjODExYzllNDJkNzYxNGFlMGE3MzRlZDU3OWQwYzU4ZDBjMDExN2E4YzdlYTkzYjE3ZjY1NWQ0ODE5MFgycUVpV0FJRTF0TlpmY0psU3BZVVN0ZWt1MjJ6R29UYUZFOTc1emFDSzZYR1UreWsrclVDNlZQTXdRVlI1V3pkeStJZWVzbm9PY1RVaGFsRW9iZz09" width="49%" height="505"></iframe><br>
+<ul>
+<li>木目細やかな四角で出来た平面が出来ました！</li>
+</ul>
+
+            </section>
+        
+
+    </section>
     
 
 
@@ -323,17 +530,98 @@
     
     <section>
         <section >
-            <p>クリエイティブコーディングを</p>
+            <h3><a id="user-content-平面に画像を貼り付ける" class="anchor" href="#平面に画像を貼り付ける" aria-hidden="true"></a>平面に画像を貼り付ける</h3>
 
             </section>
         
             <section >
-                <hr>
+                <ul>
+<li></li>
+</ul>
 
             </section>
         
 
     </section>
+    
+
+
+
+    
+    <section>
+        <section >
+            <h3><a id="user-content-シェーダーを使わないで揺らしてみる" class="anchor" href="#シェーダーを使わないで揺らしてみる" aria-hidden="true"></a>シェーダーを使わないで揺らしてみる</h3>
+
+            </section>
+        
+            <section >
+                
+            </section>
+        
+
+    </section>
+    
+
+
+
+    
+    <section>
+        <section >
+            <h3><a id="user-content-シェーダーを使って揺らしてみる" class="anchor" href="#シェーダーを使って揺らしてみる" aria-hidden="true"></a>シェーダーを使って揺らしてみる</h3>
+
+            </section>
+        
+            <section >
+                
+            </section>
+        
+
+    </section>
+    
+
+
+
+    
+    <section>
+        <section >
+            <h3><a id="user-content-模様自体も揺らしてみる" class="anchor" href="#模様自体も揺らしてみる" aria-hidden="true"></a>模様自体も揺らしてみる</h3>
+
+            </section>
+        
+            <section >
+                
+            </section>
+        
+
+    </section>
+    
+
+
+
+    
+    <section>
+        <section >
+            <h3><a id="user-content-まとめ" class="anchor" href="#まとめ" aria-hidden="true"></a>まとめ</h3>
+
+            </section>
+        
+            <section >
+                
+            </section>
+        
+
+    </section>
+    
+
+
+
+    
+        <section >
+            
+            <p>終</p>
+<hr>
+
+            </section>
     
 
 
