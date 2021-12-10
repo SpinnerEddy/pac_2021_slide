@@ -633,6 +633,7 @@ function draw() {
     noFill();  // 塗り潰ししない
     stroke(255);  // 白い線
 
+    texture(graphics);                           // 画像を貼り付ける宣言
     for (let y = 0; y &lt; row - 1; y++) {          // 1周毎に次の列の頂点まで見るので列数-1まで
         beginShape(TRIANGLE_STRIP);              // 順に連結した三角形 を生成する
         for (let x = 0; x &lt; col; x++) {          // 1行の頂点全てで見ていく
@@ -675,12 +676,100 @@ function draw() {
     
     <section>
         <section >
-            <h3><a id="user-content-シェーダーを使わないで揺らしてみる" class="anchor" href="#シェーダーを使わないで揺らしてみる" aria-hidden="true"></a>シェーダーを使わないで揺らしてみる</h3>
+            <h3><a id="user-content-平面を揺らしてみる" class="anchor" href="#平面を揺らしてみる" aria-hidden="true"></a>平面を揺らしてみる</h3>
+<ul>
+<li>画像を貼り付けた平面に動きをつけます。</li>
+<li>今回は簡単な旗っぽい動きをつけてみます。</li>
+</ul>
 
             </section>
         
             <section >
-                
+                <h3><a id="user-content-揺らす動き" class="anchor" href="#揺らす動き" aria-hidden="true"></a>揺らす動き</h3>
+<font size="5">
+<ul>
+<li>三角関数のsin波の動きをつけてみます。</li>
+<li>sin(角度)の角度に頂点座標で重み付けをする。</li>
+</ul>
+</font>
+<iframe src="https://openprocessing.org/sketch/1387708/embed/?plusEmbedHash=MjI2OTg3MzBjMTA3OWYwZTUyYTU4ODM5ZWUwZTFkMWMwOGFlMTVjY2Q1MWExZjIxYzFjNzYyOWIwZTYyNDRjZjQ4MGI0MjExMDQ5OWFhY2E2OWQyZDIzMDU2YTQ4NmU2MTBlOGZjYTk0MzE0MWVlN2U4MmUzOWU2NjcyMzYwZjkwRDZBOUNvVTFkUVh1djBSbUltaVQ5NXIzV0pzbHpOcTVZempJaktPMzNmbkZSVm9FVUlDVWZJd2RzV2d0Y3hhWWFhcG1kWCtUdXdCc3RFNnB2eTFpUT09" width="700" height="450"></iframe>
+            </section>
+        
+            <section >
+                <h3><a id="user-content-揺らす動きをつけるスケッチ" class="anchor" href="#揺らす動きをつけるスケッチ" aria-hidden="true"></a>揺らす動きをつけるスケッチ</h3>
+<pre><code class="language-js">let gWidth = 450;       // メッシュの横の長さ
+let gHeight = 300;      // メッシュの縦の長さ
+
+let len = 10;           // 小さな四角形の1辺の長さ 
+let col = gWidth/len;   // 全体の横の長さをlenで割って、行の点の数を求める
+let row = gHeight/len;  // 全体の縦の長さをlenで割って、列の点の数を求める
+
+let graphics;
+
+function setup() {
+    createCanvas(600, 600, WEBGL);  // texture()を使うにはWEBGLモードでなければならない
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+
+    graphics = createGraphics(gWidth, gHeight);  // 平面と同じサイズで作成
+    graphics.background(255);  // 新たな白で描画領域は塗りつぶす
+    graphics.ellipseMode(CENTER); // 円を描画する際はその中心を配置基準とする
+    graphics.rectMode(CENTER);  // 四角を描画する際はその中心を配置基準とする
+    graphics.noStroke();  // 線は書かない
+
+    graphics.push();  // 描画する上での設定を保存
+    graphics.translate(graphics.width/2, graphics.height/2);  // 描画領域の中心を原点とする
+    graphics.fill(color(&quot;#50d0d0&quot;)); // 水色
+    graphics.ellipse(-120, -80, 75); // 円を描く
+
+    graphics.fill(color(&quot;#be1e3e&quot;)); // 赤色
+    graphics.rect(120, -80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#7967c3&quot;)); // 紫色
+    graphics.rect(-120, 80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#ffc639&quot;)); // 黄色
+    graphics.ellipse(120, 80, 75); // 円を描く
+    graphics.pop(); // 描画する上での設定を元に戻す
+
+    textureMode(NORMAL);  // 画像を貼る際に画像上の位置指定を0~1で行うようにする
+}
+
+function draw() {
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+
+    translate(-gWidth/2, -gHeight/2);  // 平面を中央に置くために必要
+    noFill();  // 塗り潰ししない
+    stroke(255);  // 白い線
+
+    texture(graphics);                           // 画像を貼り付ける宣言
+    for (let y = 0; y &lt; row - 1; y++) {          // 1周毎に次の列の頂点まで見るので列数-1まで
+        beginShape(TRIANGLE_STRIP);              // 順に連結した三角形 を生成する
+        for (let x = 0; x &lt; col; x++) {          // 1行の頂点全てで見ていく
+            // uv座標(0~1)を求める
+            let u = map(x, 0, col-1, 0, 1);      
+            let v1 = map(y, 0, row-1, 0, 1);
+            let v2 = map(y+1, 0, row-1, 0, 1);
+
+            vertex(x * len, y * len + sin(frameCount*0.2+u*TWO_PI*2) * len, u, v1);        // y座標にsin関数分の値を足す(uの値で特徴づけ)
+            vertex(x * len, (y + 1) * len + sin(frameCount*0.2+u*TWO_PI*2) * len, u, v2);  // y座標にsin関数分の値を足す(uの値で特徴づけ)
+        }
+        endShape();                              // 1列分が終わったら一旦区切る
+    }
+}
+</code></pre>
+<font size="5">
+<p class="fragment current-only" data-code-focus="53-54">y座標にsin関数で計算された値を足して動きをつける。</p>
+</font>
+            </section>
+        
+            <section >
+                <h3><a id="user-content-揺らす動きをつけるスケッチ-1" class="anchor" href="#揺らす動きをつけるスケッチ-1" aria-hidden="true"></a>揺らす動きをつけるスケッチ</h3>
+<iframe src="https://openprocessing.org/sketch/1380594/embed/?plusEmbedHash=NDE1YzEzMjljNmJiOGM3YWJhMWQzNzczMjNhNTRjZjQyN2Y2YWNkOGI5MTVmZDZiODkwOTBiMWVkZmJlNTRlNmIwYjZmOWFkYzcwNDI5Zjk0MTAzMWRmNTNjZGMwNGZjZDJiZjRiMTM2MDFlY2UwYWM0MTY4YzFhMmVjMTZjMWExa3kzNFVVelg5WlpZUFVrN2hXYmk5ejBlWmFFYXdGL2M1NXlQaDIrZlc2dVZmVTRPQUpYeVhsVmk0QVYwSEt4RGppWndKVzZCbHZ1cGhPRHNjdDRjdz09" width="49%" height="505"></iframe><br>
+<font size="5">
+<ul>
+<li>無事揺らす動きがつけられました！</li>
+</ul>
+</font>
             </section>
         
 
@@ -693,45 +782,159 @@ function draw() {
     <section>
         <section >
             <h3><a id="user-content-シェーダーを使って揺らしてみる" class="anchor" href="#シェーダーを使って揺らしてみる" aria-hidden="true"></a>シェーダーを使って揺らしてみる</h3>
+<ul>
+<li>揺らす動きをシェーダーを使ったやり方で実現を試みます。</li>
+</ul>
 
             </section>
         
             <section >
-                
-            </section>
-        
-
-    </section>
-    
-
-
-
-    
-    <section>
-        <section >
-            <h3><a id="user-content-模様自体も揺らしてみる" class="anchor" href="#模様自体も揺らしてみる" aria-hidden="true"></a>模様自体も揺らしてみる</h3>
+                <h3><a id="user-content-シェーダーとは？" class="anchor" href="#シェーダーとは？" aria-hidden="true"></a>シェーダーとは？</h3>
+<ul>
+<li>3次元の物体に対して陰影をつけるための計算を行うプログラムを指します。</li>
+<li>glsl、Metal、HLSLなどが該当します。p5.jsではglslを使います。</li>
+</ul>
 
             </section>
         
             <section >
-                
+                <h3><a id="user-content-シェーダーとは？-1" class="anchor" href="#シェーダーとは？-1" aria-hidden="true"></a>シェーダーとは？</h3>
+<p><img src="Shader.png" width=600 height=300 alt="uv"><br>
+<font size="5"></p>
+<ul>
+<li>主にバーテックスシェーダーで頂点について、フラグメントシェーダーで色情報について処理が行われます。</li>
+<li>大まかにはバーテックスシェーダーによる座標変換、その後フラグメントシェーダーで頂点が構成する面について色情報を決定するという流れになります。</li>
+</ul>
+</font> 
             </section>
         
+            <section >
+                <h3><a id="user-content-シェーダーを使う" class="anchor" href="#シェーダーを使う" aria-hidden="true"></a>シェーダーを使う</h3>
+<pre><code>// バーテックスシェーダーのコードをvsに文字列として入れる。
+let vs = `
+precision mediump float;  // どれくらいの精度で計算するかを定義
 
-    </section>
-    
+attribute vec3 aPosition;       // 頂点の位置
+attribute vec2 aTexCoord;       // 画像のuv座標
+uniform mat4 uProjectionMatrix; // プロジェクション変換行列(カメラに映る範囲の決定に使う)
+uniform mat4 uModelViewMatrix;  // ビュー変換行列(カメラの視点の決定に使う)
+uniform float time;             // 時間(p5.jsのスケッチ側から送ってもらう)
 
+varying vec2 vTexCoord;         // 画像のuv座標(フラグメントシェーダーに送る)
 
+void main() { 
+    vec3 uPosition = aPosition + vec3(0.0, sin(time + aPosition.x * 0.02)*20.0, 0.0);  // 元々の位置座標に対して頂点のx座標で重み付けをしてsin関数の動きをつける
+    vec4 positionVec4 = vec4(uPosition, 1.0);  // 位置座標をvec4型にして格納
 
-    
-    <section>
-        <section >
-            <h3><a id="user-content-まとめ" class="anchor" href="#まとめ" aria-hidden="true"></a>まとめ</h3>
+    gl_Position = uProjectionMatrix * uModelViewMatrix * positionVec4;  // 座標変換を実行(プロジェクション変換行列×ビュー変換行列×頂点座標)
+    vTexCoord = aTexCoord;  // フラグメントシェーダー側に送るためのuv座標受け渡し
+}
+`;
+
+// フラグメントシェーダーのコードをfsに文字列として入れる。
+let fs = `
+#ifdef GL_ES
+precision mediump float;  // どれくらいの精度で計算するかを定義
+#endif
+
+varying vec2 vTexCoord;  // バーテックスシェーダー側から送られた画像のuv座標
+
+uniform sampler2D tex;   // 送られた画像の情報
+uniform float time;      // 時間(p5.jsのスケッチ側から送ってもらう)
+
+void main() {
+
+    // 送られた画像の色情報をそのまま返す
+    vec2 uv = vTexCoord;
+    vec4 texture = texture2D(tex, uv);
+    gl_FragColor = texture;            
+}
+`;
+
+let gWidth = 450;       // メッシュの横の長さ
+let gHeight = 300;      // メッシュの縦の長さ
+
+let len = 10;           // 小さな四角形の1辺の長さ 
+let col = gWidth/len;   // 全体の横の長さをlenで割って、行の点の数を求める
+let row = gHeight/len;  // 全体の縦の長さをlenで割って、列の点の数を求める
+
+let graphics;
+let useShader;  // シェーダー
+
+function setup() {
+    createCanvas(600, 600, WEBGL);  // texture()を使うにはWEBGLモードでなければならない
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+
+    useShader = createShader(vs, fs);  // シェーダーを作る
+
+    graphics = createGraphics(gWidth, gHeight);  // 平面と同じサイズで作成
+    graphics.background(255);  // 新たな白で描画領域は塗りつぶす
+    graphics.ellipseMode(CENTER); // 円を描画する際はその中心を配置基準とする
+    graphics.rectMode(CENTER);  // 四角を描画する際はその中心を配置基準とする
+    graphics.noStroke();  // 線は書かない
+
+    graphics.push();  // 描画する上での設定を保存
+    graphics.translate(graphics.width/2, graphics.height/2);  // 描画領域の中心を原点とする
+    graphics.fill(color(&quot;#50d0d0&quot;)); // 水色
+    graphics.ellipse(-120, -80, 75); // 円を描く
+
+    graphics.fill(color(&quot;#be1e3e&quot;)); // 赤色
+    graphics.rect(120, -80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#7967c3&quot;)); // 紫色
+    graphics.rect(-120, 80, 75, 75); // 四角を描く
+
+    graphics.fill(color(&quot;#ffc639&quot;)); // 黄色
+    graphics.ellipse(120, 80, 75); // 円を描く
+    graphics.pop(); // 描画する上での設定を元に戻す
+
+    textureMode(NORMAL);  // 画像を貼る際に画像上の位置指定を0~1で行うようにする
+}
+
+function draw() {
+    background(color(&quot;#255699&quot;));  // 背景塗り潰し
+
+    shader(useShader);  // シェーダーの実行を宣言する
+
+    useShader.setUniform(&quot;time&quot;, frameCount*0.1);  // 総フレーム数 × 0.01を時間としてシェーダー側に送る
+    useShader.setUniform(&quot;tex&quot;, graphics);    // 作った画像(graphics)をシェーダー側に送る
+
+    noStroke();  // メッシュの線を書かないようにする
+    push();
+    translate(-gWidth/2, -gHeight/2);  // 平面を中央に置くために必要
+    //texture(graphics);               // この宣言も不要になる
+    for (let y = 0; y &lt; row - 1; y++) {          // 1周毎に次の列の頂点まで見るので列数-1まで
+        beginShape(TRIANGLE_STRIP);              // 順に連結した三角形 を生成する
+        for (let x = 0; x &lt; col; x++) {          // 1行の頂点全てで見ていく
+            // uv座標(0~1)を求める
+            let u = map(x, 0, col-1, 0, 1);
+            let v1 = map(y, 0, row-1, 0, 1);
+            let v2 = map(y+1, 0, row-1, 0, 1);
+            vertex(x * len, y * len, u, v1);    // シェーダー側で頂点を動かすのでここで動かす処理は不要になる
+            vertex(x * len, (y + 1) * len, u, v2);    // シェーダー側で頂点を動かすのでここで動かす処理は不要になる
+        }
+        endShape();                              // 1列分が終わったら一旦区切る
+    }
+    pop();
+}
+</code></pre>
+<p class="fragment current-only" data-code-focus="2-20">バーテックスシェーダーのコードを文字列として定義</p>
+<p class="fragment current-only" data-code-focus="23-40">フラグメントシェーダーのコードを文字列として定義</p>
+<p class="fragment current-only" data-code-focus="56">定義した文字列を引数としてcreateShaderを実行し、シェーダーを実行できる状態にする。</p>
+<p class="fragment current-only" data-code-focus="85">シェーダーを実行を宣言し、適用する。</p>
+<p class="fragment current-only" data-code-focus="87-88">シェーダーにスケッチ側から情報を送る場合はsetUniformを使う。</p>
+<p class="fragment current-only" data-code-focus="14">シェーダー側の座標変換の前にsin関数の動きを付ける。</p>
+<p class="fragment current-only" data-code-focus="100-101">シェーダー側で頂点座標を動かすのでここで動かすようにする必要がなくなる。</p>
 
             </section>
         
             <section >
-                
+                <h3><a id="user-content-シェーダーを使う-1" class="anchor" href="#シェーダーを使う-1" aria-hidden="true"></a>シェーダーを使う</h3>
+<iframe src="https://openprocessing.org/sketch/1380610/embed/?plusEmbedHash=NTIwZDUwZjNiZTEyZGFhNGRmYzA3MjExNDk2ZTU4NTBjYjljMjQxMzAyZTgwNTA0MzM5NzM3MmMzNmE2NzY2NDU3NDExNzEwNTU3ODZlYjk2ZmQ4OTk2MjNlZTdmZmRlYmU3ODExMjg5MDBkZjFhODJjMDljYjQ4MTAyYzlkNTd1amJIbVRrWTlrdDhJRlBsNWVTTWZCYm5PSlY4dGt3MUpNTW1nbm1nb0cxcDFvZzM1YmZFM3I2WElmS0lLRktPQWpUa1Zic0lPcWhUMnVSM25KWGZ4QT09" width="49%" height="505"></iframe><br>
+<ul>
+<li>バーテックスシェーダーを使って揺れる動きを付けることができました！</li>
+</ul>
+
             </section>
         
 
@@ -743,7 +946,25 @@ function draw() {
     
         <section >
             
-            <p>終</p>
+            <h3><a id="user-content-まとめ" class="anchor" href="#まとめ" aria-hidden="true"></a>まとめ</h3>
+<ul>
+<li>
+<p>描画した結果を画像として扱って動く平面に貼り付ける方法を説明しました。これが出来ると色々面白いことに応用できないかなと思います。</p>
+</li>
+<li>
+<p>かなり簡潔にはなりましたがシェーダーを使って頂点座標を動かす方法についても解説しました。バーテックスシェーダーは自分個人としてはとっかかりに苦労したので、これで少しでも始める上での敷居が下げられる助けになればと思います。</p>
+</li>
+</ul>
+
+            </section>
+    
+
+
+
+    
+        <section >
+            
+            <p>ここまで見てくださりありがとうございました。</p>
 <hr>
 
             </section>
