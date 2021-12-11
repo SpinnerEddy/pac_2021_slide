@@ -312,11 +312,13 @@
         <section >
             
             <h3><a id="user-content-今回のテーマ" class="anchor" href="#今回のテーマ" aria-hidden="true"></a>今回のテーマ</h3>
+<font size="5">
 <ul>
 <li>p5.js と バーテックスシェーダー</li>
 <li>p5.jsでバーテックスシェーダーを使って動くものを作ってみます。</li>
 </ul>
 <iframe src="https://openprocessing.org/sketch/1380610/embed/?plusEmbedHash=NTIwZDUwZjNiZTEyZGFhNGRmYzA3MjExNDk2ZTU4NTBjYjljMjQxMzAyZTgwNTA0MzM5NzM3MmMzNmE2NzY2NDU3NDExNzEwNTU3ODZlYjk2ZmQ4OTk2MjNlZTdmZmRlYmU3ODExMjg5MDBkZjFhODJjMDljYjQ4MTAyYzlkNTd1amJIbVRrWTlrdDhJRlBsNWVTTWZCYm5PSlY4dGt3MUpNTW1nbm1nb0cxcDFvZzM1YmZFM3I2WElmS0lLRktPQWpUa1Zic0lPcWhUMnVSM25KWGZ4QT09" width="49%" height="505"></iframe><br>
+</font>
             </section>
     
 
@@ -655,11 +657,12 @@ function draw() {
 }
 
 </code></pre>
+<font size="5">
 <p class="fragment current-only" data-code-focus="11">createCanvasでWEBGLモードを指定しなければtexture()を使えないので指定します。</p>
 <p class="fragment current-only" data-code-focus="14-33">貼り付ける画像を生成</p>
 <p class="fragment current-only" data-code-focus="41">描画モードをWEBGLにすることで画面中央が原点になるので位置調整</p>
 <p class="fragment current-only" data-code-focus="48-54">uv座標を計算し、平面を作るvertexの位置座標の後に設定</p>
-
+</font>
             </section>
         
             <section >
@@ -923,6 +926,7 @@ function draw() {
     pop();
 }
 </code></pre>
+<font size="5">
 <p class="fragment current-only" data-code-focus="2-20">バーテックスシェーダーのコードを文字列として定義</p>
 <p class="fragment current-only" data-code-focus="23-40">フラグメントシェーダーのコードを文字列として定義</p>
 <p class="fragment current-only" data-code-focus="56">定義した文字列を引数としてcreateShaderを実行し、シェーダーを実行できる状態にする。</p>
@@ -930,16 +934,17 @@ function draw() {
 <p class="fragment current-only" data-code-focus="87-88">シェーダーにスケッチ側から情報を送る場合はsetUniformを使う。</p>
 <p class="fragment current-only" data-code-focus="14">シェーダー側の座標変換の前にsin関数の動きを付ける。</p>
 <p class="fragment current-only" data-code-focus="100-101">シェーダー側で頂点座標を動かすのでここで動かすようにする必要がなくなる。</p>
-
+</font>
             </section>
         
             <section >
                 <h3><a id="user-content-シェーダーを使う-1" class="anchor" href="#シェーダーを使う-1" aria-hidden="true"></a>シェーダーを使う</h3>
 <iframe src="https://openprocessing.org/sketch/1380610/embed/?plusEmbedHash=NTIwZDUwZjNiZTEyZGFhNGRmYzA3MjExNDk2ZTU4NTBjYjljMjQxMzAyZTgwNTA0MzM5NzM3MmMzNmE2NzY2NDU3NDExNzEwNTU3ODZlYjk2ZmQ4OTk2MjNlZTdmZmRlYmU3ODExMjg5MDBkZjFhODJjMDljYjQ4MTAyYzlkNTd1amJIbVRrWTlrdDhJRlBsNWVTTWZCYm5PSlY4dGt3MUpNTW1nbm1nb0cxcDFvZzM1YmZFM3I2WElmS0lLRktPQWpUa1Zic0lPcWhUMnVSM25KWGZ4QT09" width="49%" height="505"></iframe><br>
+<font size="5">
 <ul>
 <li>バーテックスシェーダーを使って揺れる動きを付けることができました！</li>
 </ul>
-
+</font>
             </section>
         
 
